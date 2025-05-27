@@ -1,27 +1,38 @@
 package FreelanceKings.FreelanceKingss.Controllers;
 
 import FreelanceKings.FreelanceKingss.Models.User;
-import FreelanceKings.FreelanceKingss.Repostiories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import FreelanceKings.FreelanceKingss.Service.UserService;
+import org.springframework.web.bind.annotation.*;
 
 import java.awt.desktop.UserSessionEvent;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
-    @Autowired
-    public UserRepository userRepository ;
-    List<User> users;
+    private final UserService userService;
 
-
-
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
     @GetMapping
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<User> getAllUsers(){
+        return userService.getAllUsers();
+    }
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable long id){
+        return userService.getUserById(id);
+    }
+    @PostMapping
+    public User createUser(@RequestBody User user){
+        return userService.createUser(user);
+    }
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable long id,@RequestBody User user){
+        return userService.updateUser(id,user);
+    }
+    @DeleteMapping("{id}")
+    public void deleteUser(@PathVariable long id){
+        userService.deleteUser(id);
     }
 }
